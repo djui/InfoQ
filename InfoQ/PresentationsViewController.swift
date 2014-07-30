@@ -11,8 +11,13 @@ class PresentationsViewController: UITableViewController, UITableViewDelegate, U
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         tableView.registerClass(PresentationsTableViewCell.self, forCellReuseIdentifier: "PresentationCell")
-        api.fetchPresentations()        
+
+        // A little trick for removing the cell separators
+        let frame = CGRectMake(CGRectGetMinX(view.bounds), CGRectGetMinY(view.bounds), CGRectGetWidth(view.bounds), CGRectGetHeight(view.bounds) - 98)
+        tableView.tableFooterView = EmptyDatasetView(frame: frame)
+        api.fetchPresentations()
     }
     
     override func didReceiveMemoryWarning() {
@@ -78,6 +83,25 @@ class PresentationsTableViewCell: UITableViewCell {
 
     init(style: UITableViewCellStyle, reuseIdentifier: String!) {
         super.init(style: UITableViewCellStyle.Subtitle, reuseIdentifier: reuseIdentifier)
+    }
+
+}
+
+class EmptyDatasetView: UIView {
+
+    init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = UIColor.whiteColor()
+    }
+
+    override func drawRect(rect: CGRect) {
+        let label = UILabel()
+        label.textColor = UIColor.grayColor()
+        label.textAlignment = NSTextAlignment.Center
+        label.text = "No presentations loaded."
+        label.sizeToFit()
+        label.center = center
+        addSubview(label)
     }
 
 }
