@@ -1,21 +1,50 @@
-//
-//  AppDelegate.swift
-//  InfoQ
-//
-//  Created by Uwe Dauernheim on 25/07/14.
-//  Copyright (c) 2014 Uwe Dauernheim. All rights reserved.
-//
-
+// Colors: Blue  #2160a7
+//         Green #437E39
 import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
                             
     var window: UIWindow?
-
+    var tabBarController: UITabBarController?
+    var presentationsNavigationController: UINavigationController?
+    var presentationsViewController: UIViewController?
 
     func application(application: UIApplication!, didFinishLaunchingWithOptions launchOptions: NSDictionary!) -> Bool {
         // Override point for customization after application launch.
+        
+        // View Controllers
+        
+        presentationsViewController = PresentationsViewController()
+    
+        // Navigation Controllers
+
+        presentationsNavigationController = UINavigationController(rootViewController: presentationsViewController)
+        presentationsNavigationController!.navigationBar.topItem.title = "Presentations"
+        //presentationsNavigationController!.hidesBarsOnSwipe = true // Not really nice (yet)
+        
+        let presentationsTabTitle = NSLocalizedString("Presentations", value: "Presentations", comment: "Text for presentations tab icon")
+        let presentationsTabImage = UIImage(named: "presentationsTabImage.png")
+        let presentationsTabImageSelected = UIImage(named: "presentationsTabImageSelected.png")
+        let presentationsTabBarItem = UITabBarItem(title: presentationsTabTitle, image: presentationsTabImage, selectedImage: presentationsTabImageSelected)
+        
+        presentationsNavigationController!.tabBarItem = presentationsTabBarItem
+        
+        // Tabbar Controller
+        
+        let tabs = [presentationsNavigationController!, presentationsNavigationController!]
+        
+        tabBarController = UITabBarController()
+        tabBarController!.setViewControllers(tabs, animated: false)
+        tabBarController!.hidesBottomBarWhenPushed = true // needed?
+        
+        // Window
+        
+        window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        window!.backgroundColor = UIColor.whiteColor()
+        window!.rootViewController = tabBarController
+        window!.makeKeyAndVisible()
+        
         return true
     }
 
