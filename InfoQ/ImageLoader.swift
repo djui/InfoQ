@@ -12,10 +12,10 @@ class ImageLoader {
     }
     
     func imageForUrl(urlString: String, completionHandler: (image: UIImage?) -> Void) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), {
+        async.bg {
             if let imageData = self.cache.objectForKey(urlString) as? NSData {
                 let image = UIImage(data: imageData)
-                dispatch_async(dispatch_get_main_queue()) {
+                async.main {
                     completionHandler(image: image)
                 }
                 return
@@ -34,13 +34,13 @@ class ImageLoader {
                 if data {
                     let image = UIImage(data: data)
                     self.cache.setObject(data, forKey: urlString)
-                    dispatch_async(dispatch_get_main_queue()) {
+                    async.main {
                         completionHandler(image: image)
                     }
                 }
             }.resume()
             UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        })
+        }
     }
     
 }

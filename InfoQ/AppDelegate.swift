@@ -1,47 +1,47 @@
-// Colors: Blue  #2160a7
-//         Green #437E39
+// Colors: Blue
+//         Green
 import UIKit
+
+let INFOQ_BLUE = UIColor(hex: 0x3677B8)
+let INFOQ_GREEN = UIColor(hex: 0x3EA34C)
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-                            
+
     var window: UIWindow?
-    var tabBarController: UITabBarController?
-    var presentationsNavigationController: UINavigationController?
-    var presentationsViewController: UIViewController?
 
     func application(application: UIApplication!, didFinishLaunchingWithOptions launchOptions: NSDictionary!) -> Bool {
-        // Override point for customization after application launch.
-        
         // View Controllers
         
-        presentationsViewController = PresentationsViewController()
+        let presentationsViewController = PresentationsViewController()
     
         // Navigation Controllers
 
-        presentationsNavigationController = UINavigationController(rootViewController: presentationsViewController)
-        presentationsNavigationController!.navigationBar.topItem.title = "Presentations"
-        //presentationsNavigationController!.hidesBarsOnSwipe = true // Not really nice (yet)
+        let presentationsNavigationController = UINavigationController(rootViewController: presentationsViewController)
+        presentationsNavigationController.navigationBar.topItem.title = "Presentations"
+        //presentationsNavigationController.hidesBarsOnSwipe = true // Not really nice (yet)
+        presentationsNavigationController.navigationBar.tintColor = INFOQ_BLUE
         
         let presentationsTabTitle = NSLocalizedString("Presentations", value: "Presentations", comment: "Text for presentations tab icon")
         let presentationsTabImage = UIImage(named: "presentationsTabImage.png")
         let presentationsTabImageSelected = UIImage(named: "presentationsTabImageSelected.png")
         let presentationsTabBarItem = UITabBarItem(title: presentationsTabTitle, image: presentationsTabImage, selectedImage: presentationsTabImageSelected)
         
-        presentationsNavigationController!.tabBarItem = presentationsTabBarItem
+        presentationsNavigationController.tabBarItem = presentationsTabBarItem
         
         // Tabbar Controller
         
-        let tabs = [presentationsNavigationController!, presentationsNavigationController!]
+        let tabs = [presentationsNavigationController]
         
-        tabBarController = UITabBarController()
-        tabBarController!.setViewControllers(tabs, animated: false)
-        tabBarController!.hidesBottomBarWhenPushed = true // needed?
+        let tabBarController = UITabBarController()
+        tabBarController.setViewControllers(tabs, animated: false)
+        tabBarController.hidesBottomBarWhenPushed = true // needed?
+        tabBarController.tabBar.tintColor = INFOQ_BLUE
         
         // Window
         
         window = UIWindow(frame: UIScreen.mainScreen().bounds)
-        window!.backgroundColor = UIColor.whiteColor()
+        window!.backgroundColor = .whiteColor()
         window!.rootViewController = tabBarController
         window!.makeKeyAndVisible()
         

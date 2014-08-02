@@ -32,6 +32,7 @@
 		C62E68BD1988E6BF0019652B /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		C62E68BF1988EFE30019652B /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		C62E68C11988F7DB0019652B /* PresentationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresentationViewController.swift; sourceTree = "<group>"; };
+		C6B606F3198BBD8600C55AA9 /* TODO.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = TODO.md; path = InfoQ/TODO.md; sourceTree = "<group>"; };
 		C6C6EEB9198804D000C97F31 /* APIController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIController.swift; sourceTree = "<group>"; };
 		C6C6EEBB1988238900C97F31 /* Presentation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Presentation.swift; sourceTree = "<group>"; };
 		C6EE91B01982C2EB00A4CFFF /* InfoQ.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InfoQ.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -62,12 +63,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C61831C8198CE23C001512F6 /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Vendor;
+			sourceTree = "<group>";
+		};
 		C6EE91A71982C2EA00A4CFFF = {
 			isa = PBXGroup;
 			children = (
 				C6EE91B21982C2EB00A4CFFF /* InfoQ */,
 				C6EE91C71982C2EB00A4CFFF /* InfoQTests */,
 				C6EE91B11982C2EB00A4CFFF /* Products */,
+				C6B606F3198BBD8600C55AA9 /* TODO.md */,
 			);
 			sourceTree = "<group>";
 		};
@@ -90,6 +99,7 @@
 				C6C6EEB9198804D000C97F31 /* APIController.swift */,
 				C62E68BF1988EFE30019652B /* ImageLoader.swift */,
 				C62E68BD1988E6BF0019652B /* Utils.swift */,
+				C61831C8198CE23C001512F6 /* Vendor */,
 				C6EE91BE1982C2EB00A4CFFF /* Images.xcassets */,
 				C6EE91B31982C2EB00A4CFFF /* Supporting Files */,
 			);
@@ -334,6 +344,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = InfoQ/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -348,6 +359,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = InfoQ/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
