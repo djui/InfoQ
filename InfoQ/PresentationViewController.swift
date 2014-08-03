@@ -43,10 +43,21 @@ class PresentationViewController: UIViewController {
         summary.text = presentation!.summary
 
         moviePlayer = MPMoviePlayerController()
-        moviePlayer!.view.frame = CGRect(x: MARGIN, y: 4 * MARGIN + 100+20+150, width: WIDTH, height: 300)
-        moviePlayer!.movieSourceType = MPMovieSourceType.File
+        moviePlayer!.view.frame = CGRect(x: MARGIN, y: 4 * MARGIN + 100+20+150, width: WIDTH, height: 150)
+        moviePlayer!.movieSourceType = MPMovieSourceType.Unknown
         moviePlayer!.controlStyle = MPMovieControlStyle.Embedded
-        moviePlayer!.shouldAutoplay = true
+
+        api.fetchPresentation(presentation!.id!) { presentation in
+            logInfo("Preparing \(presentation.videoUrl!.description)")
+            self.moviePlayer!.movieSourceType = MPMovieSourceType.Unknown
+            self.moviePlayer!.contentURL = presentation.videoUrl
+            self.moviePlayer!.prepareToPlay()
+            self.moviePlayer!.play()
+            println(self.moviePlayer!.contentURL)
+            println(self.moviePlayer!.errorLog)
+            println(self.moviePlayer!.accessLog)
+            logInfo("Playing \(presentation.videoUrl!.description)")
+        }
 
         let scrollView = UIScrollView(frame: view.frame)
         scrollView.addSubview(title)
@@ -61,16 +72,6 @@ class PresentationViewController: UIViewController {
 
         view.backgroundColor = UIColor.whiteColor()
         view.addSubview(scrollView)
-    }
-
-    override func viewWillAppear(animated: Bool) {
-        api.fetchPresentation(presentation!.id!) { presentation in
-            logInfo("Preparing \(presentation.videoUrl!.description)")
-            self.moviePlayer!.contentURL = presentation.videoUrl
-            self.moviePlayer!.prepareToPlay()
-            self.moviePlayer!.play()
-            logInfo("Playing \(presentation.videoUrl!.description)")
-        }
     }
 
 
