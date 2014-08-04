@@ -3,12 +3,12 @@ import UIKit
 class APIController {
     
     func fetchPresentations(since: NSString?, completionHandler: (Array<Presentation>) -> Void) {
-        var endpoint = "http://infoqcast.herokuapp.com/api/v1/presentations" + (since ? "?since=\(since!)" : "")
+        var endpoint = "http://infoqcast.herokuapp.com/api/v1/presentations" + (since != nil ? "?since=\(since!)" : "")
         logInfo(endpoint)
         get(endpoint) { jsonResult in
             let data = self.parseJSONArray(jsonResult)
-            if data.error {
-                logError(data.error!.description)
+            if let error = data.error {
+                logError(error.description)
                 return
             }
             let result = data.result!.map { Presentation($0) }
@@ -21,8 +21,8 @@ class APIController {
         logInfo(endpoint)
         get(endpoint) { jsonResult in
             let data = self.parseJSONObject(jsonResult)
-            if data.error {
-                logError(data.error!.description)
+            if let error = data.error {
+                logError(error.description)
                 return
             }
             let result = Presentation(data.result)
@@ -35,7 +35,7 @@ class APIController {
         NSURLSession.sharedSession().dataTaskWithURL(url) { data, response, error in
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
 
-            if error {
+            if error != nil {
                 logError(error.localizedDescription)
                 return
             }

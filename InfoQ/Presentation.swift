@@ -39,10 +39,6 @@ class Presentation {
 
 
     init(_ jsonDict: NSDictionary?) {
-        if !jsonDict {
-            return
-        }
-
         id = jsonDict!["id"] as? String
         title = jsonDict!["title"] as? String
         summary = jsonDict!["summary"] as? String

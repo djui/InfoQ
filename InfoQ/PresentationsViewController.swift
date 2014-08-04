@@ -52,16 +52,16 @@ class PresentationsViewController: UITableViewController, UITableViewDelegate, U
         let presentation = presentations[indexPath.row]
 
         //cell.titleTextLabel.numberOfLines = 0
-        cell.titleTextLabel.lineBreakMode = .ByTruncatingTail
-        cell.titleTextLabel.text = presentation.title
-        cell.descriptionTextLabel.text = presentation.authorsFormatted
-        cell.dateTextLabel.textAlignment = .Right
-        cell.dateTextLabel.text = presentation.onlineDateFormatted
+        cell.titleTextLabel!.lineBreakMode = .ByTruncatingTail
+        cell.titleTextLabel!.text = presentation.title
+        cell.descriptionTextLabel!.text = presentation.authorsFormatted
+        cell.dateTextLabel!.textAlignment = .Right
+        cell.dateTextLabel!.text = presentation.onlineDateFormatted
 
-        cell.posterImageView.image = UIImage(named: "BlankImage")
+        cell.posterImageView!.image = UIImage(named: "BlankImage")
         ImageLoader.sharedLoader.imageForUrl(presentation.poster!) { image in
-            if image {
-                cell.posterImageView.image = image
+            if image != nil {
+                cell.posterImageView!.image = image
             }
         }
 
@@ -112,7 +112,7 @@ class PresentationsViewController: UITableViewController, UITableViewDelegate, U
     }
 
     func adjustEmptySourceView() {
-        let NAVIGATIONBAR_HEIGHT = 98
+        let NAVIGATIONBAR_HEIGHT: CGFloat = 98
 
         if presentations.count > 0 {
             tableView.tableFooterView = nil
@@ -136,42 +136,43 @@ class PresentationsViewController: UITableViewController, UITableViewDelegate, U
 
 class PresentationsTableViewCell: UITableViewCell {
 
-    var titleTextLabel: UILabel
-    var descriptionTextLabel: UILabel
-    var dateTextLabel: UILabel
-    var posterImageView: UIImageView
+    var titleTextLabel: UILabel?
+    var descriptionTextLabel: UILabel?
+    var dateTextLabel: UILabel?
+    var posterImageView: UIImageView?
 
-    init(style: UITableViewCellStyle, reuseIdentifier: String!) {
-
+    override init(style: UITableViewCellStyle, reuseIdentifier: String!) {
         posterImageView = UIImageView()
-        posterImageView.frame = CGRectMake(10, 5, 53, 39)
+        posterImageView!.frame = CGRectMake(10, 5, 53, 39)
 
         titleTextLabel = UILabel()
-        titleTextLabel.textColor = UIColor.blackColor()
+        titleTextLabel!.textColor = UIColor.blackColor()
         //titleTextLabel.backgroundColor = UIColor(red: 0, green: 0, blue: 1, alpha: 0.03)
-        titleTextLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
-        titleTextLabel.frame = CGRectMake(68, 5, 247, 20)
+        titleTextLabel!.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
+        titleTextLabel!.frame = CGRectMake(68, 5, 247, 20)
 
         descriptionTextLabel = UILabel()
-        descriptionTextLabel.textColor = UIColor.darkGrayColor()
+        descriptionTextLabel!.textColor = UIColor.darkGrayColor()
         //descriptionTextLabel.backgroundColor = UIColor(red: 1, green: 0, blue: 0, alpha: 0.03)
-        descriptionTextLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption1)
-        descriptionTextLabel.frame = CGRectMake(68, 25, 152, 19)
+        descriptionTextLabel!.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption1)
+        descriptionTextLabel!.frame = CGRectMake(68, 25, 152, 19)
 
         dateTextLabel = UILabel()
-        dateTextLabel.textColor = UIColor.darkGrayColor()
+        dateTextLabel!.textColor = UIColor.darkGrayColor()
         //dateTextLabel.backgroundColor = UIColor(red: 0, green: 1, blue: 0, alpha: 0.03)
-        dateTextLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption2)
-        dateTextLabel.frame = CGRectMake(220, 25, 95, 19)
+        dateTextLabel!.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption2)
+        dateTextLabel!.frame = CGRectMake(220, 25, 95, 19)
 
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        contentView.addSubview(titleTextLabel)
-        contentView.addSubview(descriptionTextLabel)
-        contentView.addSubview(dateTextLabel)
-        contentView.addSubview(posterImageView)
+        contentView.addSubview(titleTextLabel!)
+        contentView.addSubview(descriptionTextLabel!)
+        contentView.addSubview(dateTextLabel!)
+        contentView.addSubview(posterImageView!)
+    }
 
-
+    required init(coder aDecoder: NSCoder!) {
+        super.init(coder: aDecoder)
     }
 
 }
@@ -179,9 +180,13 @@ class PresentationsTableViewCell: UITableViewCell {
 
 class EmptyDatasetView: UIView {
 
-    init(frame: CGRect) {
+    required override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor.whiteColor()
+    }
+
+    required init(coder aDecoder: NSCoder!) {
+        super.init(coder: aDecoder)
     }
 
     override func drawRect(rect: CGRect) {

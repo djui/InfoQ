@@ -14,7 +14,7 @@ class ImageLoader {
     func imageForUrl(urlString: String, completionHandler: (image: UIImage?) -> Void) {
         async.bg {
             if let imageData = self.cache.objectForKey(urlString) as? NSData {
-                let image = UIImage(data: imageData)
+                let image: UIImage? = UIImage(data: imageData)
                 async.main {
                     completionHandler(image: image)
                 }
@@ -25,14 +25,14 @@ class ImageLoader {
             NSURLSession.sharedSession().dataTaskWithURL(url) { data, response, error in
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
 
-                if error {
+                if error != nil {
                     logError(error.localizedDescription)
                     completionHandler(image: nil)
                     return
                 }
                 
-                if data {
-                    let image = UIImage(data: data)
+                if data != nil {
+                    let image: UIImage? = UIImage(data: data)
                     self.cache.setObject(data, forKey: urlString)
                     async.main {
                         completionHandler(image: image)
