@@ -43,13 +43,7 @@ class Presentation {
         title = jsonDict!["title"] as? String
         summary = jsonDict!["summary"] as? String
         authors = jsonDict!["authors"] as? Array<String>
-        // BUG: Not sure if this is a SWIFT bug or I am doing something wrong
-        //cell.detailTextLabel.text = (presentation.authors.count > 2 ? ", " : " & ").join(presentation.authors)
-        switch authors!.count {
-            case 1: authorsFormatted = authors![0]
-            case 2: authorsFormatted = "\(authors![0]) & \(authors![1])"
-            default: authorsFormatted = ", ".join(authors!)
-        }
+        authorsFormatted = (authors!.count > 2 ? ", " : " & ").join(authors!)
         keywords = jsonDict!["keywords"] as? Array<String>
         length = jsonDict!["length"] as? UInt
         link = jsonDict!["link"] as? String
