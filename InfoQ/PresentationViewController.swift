@@ -14,6 +14,9 @@ class PresentationViewController: UIViewController {
         self.presentation = presentation
     }
 
+
+    // MARK: UIViewController Protocol
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -57,12 +60,6 @@ class PresentationViewController: UIViewController {
             height: WIDTH * DEFAULT_ASPECT_RATIO)
         OFFSET += WIDTH * DEFAULT_ASPECT_RATIO
 
-        api.fetchPresentation(presentation!.id!) { presentation in
-            self.playerViewController!.player = AVPlayer.playerWithURL(presentation.videoUrl) as AVPlayer
-            // TODO: Make asynchronous
-            self.adjustPlayerViewFrameSize()
-        }
-
         let scrollView = UIScrollView(frame: view.frame)
         scrollView.addSubview(title)
         scrollView.addSubview(author)
@@ -74,17 +71,61 @@ class PresentationViewController: UIViewController {
         view.addSubview(scrollView)
     }
 
+    override func viewDidAppear(animated: Bool) {
+        api.fetchPresentation(presentation!.id!) { presentation in
+//            self.playerViewController!.player = AVPlayer(URL: presentation.videoUrl)
+            let asset = AVAsset.assetWithURL(presentation.videoUrl) as AVAsset
+            let playerItem = AVPlayerItem(URL: presentation.videoUrl)
+            playerItem.addObserver(self, forKeyPath: "presentationSize", options: NSKeyValueObservingOptions.New, context: nil)
+            self.playerViewController!.player = AVPlayer(playerItem: playerItem)
 
-    // MARK: UIViewController Protocol
-    
+            asset.loadValuesAsynchronouslyForKeys(["playable"]) {
+                var error: NSError?
+                let status = asset.statusOfValueForKey("playable", error: &error)
+                if error != nil {
+                    logError("Error while getting playable status \(asset)")
+                } else {
+                    switch status {
+                        case .Unknown: logInfo("Status: Unknown")
+                        case .Failed: logInfo("Status: Failed")
+                        case .Cancelled: logInfo("Status: Cancelled")
+                        case .Loading: logInfo("Status: Loading")
+                        case .Loaded:
+                            logInfo("Status: Loaded")
+                            let size = self.playerViewController!.player.currentItem.presentationSize
+                            self.adjustPlayerSize(size)
+                        default: logInfo("Unknown status")
+                    }
+                }
+            }
+        }
+    }
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
 
-    func adjustPlayerViewFrameSize() {
-        let movieSize = playerViewController!.player.currentItem.presentationSize
+
+    // MARK: Internals
+
+    override func observeValueForKeyPath(keyPath: String!, ofObject object: AnyObject!, change: [NSObject : AnyObject]!, context: UnsafeMutablePointer<()>) {
+        if keyPath != "presentationSize" {
+            return
+        }
+
+        logInfo("observeValueForKeyPath")
+
+        let foo: NSValue = change[NSKeyValueChangeNewKey] as NSValue
+        let size = foo.CGSizeValue()
+        logInfo("observeValueForKeyPath \(size.description)")
+        adjustPlayerSize(size)
+    }
+
+
+    func adjustPlayerSize(size: CGSize) {
+        logInfo("Adjusting player size")
         let playerFrame = playerViewController!.view.frame
-        let aspectRatio = movieSize.height / movieSize.width
+        let aspectRatio = size.height / size.width
         let adjustedPlayerFrame = CGRect(
             x: playerFrame.origin.x,
             y: playerFrame.origin.y,
