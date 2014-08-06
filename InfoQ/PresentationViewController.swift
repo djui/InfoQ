@@ -73,31 +73,9 @@ class PresentationViewController: UIViewController {
 
     override func viewDidAppear(animated: Bool) {
         api.fetchPresentation(presentation!.id!) { presentation in
-//            self.playerViewController!.player = AVPlayer(URL: presentation.videoUrl)
-            let asset = AVAsset.assetWithURL(presentation.videoUrl) as AVAsset
             let playerItem = AVPlayerItem(URL: presentation.videoUrl)
             playerItem.addObserver(self, forKeyPath: "presentationSize", options: NSKeyValueObservingOptions.New, context: nil)
             self.playerViewController!.player = AVPlayer(playerItem: playerItem)
-
-            asset.loadValuesAsynchronouslyForKeys(["playable"]) {
-                var error: NSError?
-                let status = asset.statusOfValueForKey("playable", error: &error)
-                if error != nil {
-                    logError("Error while getting playable status \(asset)")
-                } else {
-                    switch status {
-                        case .Unknown: logInfo("Status: Unknown")
-                        case .Failed: logInfo("Status: Failed")
-                        case .Cancelled: logInfo("Status: Cancelled")
-                        case .Loading: logInfo("Status: Loading")
-                        case .Loaded:
-                            logInfo("Status: Loaded")
-                            let size = self.playerViewController!.player.currentItem.presentationSize
-                            self.adjustPlayerSize(size)
-                        default: logInfo("Unknown status")
-                    }
-                }
-            }
         }
     }
 
@@ -109,21 +87,13 @@ class PresentationViewController: UIViewController {
     // MARK: Internals
 
     override func observeValueForKeyPath(keyPath: String!, ofObject object: AnyObject!, change: [NSObject : AnyObject]!, context: UnsafeMutablePointer<()>) {
-        if keyPath != "presentationSize" {
-            return
+        if keyPath == "presentationSize" {
+            let size = (change[NSKeyValueChangeNewKey] as NSValue).CGSizeValue()
+            adjustPlayerSize(size)
         }
-
-        logInfo("observeValueForKeyPath")
-
-        let foo: NSValue = change[NSKeyValueChangeNewKey] as NSValue
-        let size = foo.CGSizeValue()
-        logInfo("observeValueForKeyPath \(size.description)")
-        adjustPlayerSize(size)
     }
 
-
     func adjustPlayerSize(size: CGSize) {
-        logInfo("Adjusting player size")
         let playerFrame = playerViewController!.view.frame
         let aspectRatio = size.height / size.width
         let adjustedPlayerFrame = CGRect(
